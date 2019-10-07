@@ -1,1 +1,6 @@
-.nfs*
+*.dSYM
+**/*.o
+._*
+*.out*
+**/.nfs*
+ft_script
