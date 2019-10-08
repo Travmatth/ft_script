@@ -6,14 +6,14 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 19:43:32 by tmatthew          #+#    #+#             */
-/*   Updated: 2018/06/24 19:45:12 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/08 08:32:01 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include "internal.h"
+# include "../../libft/libft.h"
 
 int		ft_asprintf(char **ret, const char *format, ...);
 int		ft_dprintf(int fd, const char *format, ...);

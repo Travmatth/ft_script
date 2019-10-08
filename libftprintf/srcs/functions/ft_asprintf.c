@@ -6,11 +6,11 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/03 18:27:52 by tmatthew          #+#    #+#             */
-/*   Updated: 2018/06/25 20:17:33 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/08 08:34:39 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../includes/internal.h"
 
 /*
 ** asprintf() and vasprintf() dynamically allocate a new string with malloc(3).
