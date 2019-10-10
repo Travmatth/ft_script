@@ -12,7 +12,7 @@ NAME = ft_script
 LIBFT = libftprintf/libftprintf.a
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
 LDFLAGS = -Llibftprintf -lftprintf -I./includes -ltermcap
-CORE = main
+CORE = main parse_args
 
 FILES = $(addprefix src/, $(CORE))
 SRC = $(addsuffix .c, $(FILES))
