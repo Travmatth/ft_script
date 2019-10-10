@@ -3,4 +3,5 @@
 ._*
 *.out*
 **/.nfs*
-ft_scripttypescript
+ft_script
+typescript
