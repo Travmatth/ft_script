@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/10 12:07:40 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/10 12:30:53 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ static int		parse_command(t_context *ctx, char *argv[], char *envp[], int i)
 	i = 0;
 	while (envp[i] && ft_strncmp("SHELL", envp[i], 5))
 		i += 1;
-	ctx->command = &envp[i][6];
+	if (!ft_strncmp("SHELL", envp[i], 5))
+		ctx->command = &envp[i][6];
+	else
+		ctx->command = "/bin/sh";
 	ctx->args = NULL;
 	ctx->flags |= DFLT_SHELL;
 	return (EXIT_SUCCESS);
