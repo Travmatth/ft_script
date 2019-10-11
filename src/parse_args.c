@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/10 12:30:53 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/11 13:01:28 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int		parse_command(t_context *ctx, char *argv[], char *envp[], int i)
 	file = argv[i] ? argv[i++] : "typescript";
 	if ((ctx->typescript = open(file, TYPESCRIPT_PERMS, 0666)) == -1)
 	{
-		ft_printf(OPEN_ERR, file, strerror(errno));
+		DEBUG_LOG(OPEN_ERR, file, strerror(errno));
 		return (EXIT_FAILURE);
 	}
 	if (argv[i])
@@ -40,9 +40,25 @@ static int		parse_command(t_context *ctx, char *argv[], char *envp[], int i)
 	return (EXIT_SUCCESS);
 }
 
+static void		log_command(t_context *ctx)
+{
+	int		i;
+	char	*log;
+	char	*key;
+
+	log = ctx->flags & LOG_KEYS ? "-k" : "";
+	key = ctx->flags & LOG_TIME ? "-t" : "";
+	DEBUG_LOG("./ft_script %s %s %s", log, key, ctx.command);
+	i = 0;
+	while (ctx->args && ctx->args[i])
+		DEBUG_LOG(" %s", ctx->args[i]);
+	DEBUG_PRINT("\n");
+}
+
 int				parse_args(t_context *ctx, int argc, char *argv[], char *envp[])
 {
 	int		i;
+	int		ret;
 
 	i = 1;
 	if (argc > 1)
@@ -61,5 +77,7 @@ int				parse_args(t_context *ctx, int argc, char *argv[], char *envp[])
 				break ;
 			i += 1;
 		}
-	return (parse_command(ctx, argv, envp, i));
+	ret = parse_command(ctx, argv, envp, i);
+	log_command(ctx);
+	return (ret);
 }
