@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/14 18:13:33 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/15 15:22:39 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,6 @@ int				manage_exec(t_context *ctx, char *envp[]);
 
 void			prep_pty(int fd);
 void			manage_pty(int master_fd, int typescript);
-
-/*
-** read.c
-*/
-
-int				buffered_read(int master_fd
-							, char *c
-							// , char buf[READ_BUF]
-							, int *bytes_read);
 
 /*
 ** Debug statements used when compiled with __DEBUG__ variable defined
