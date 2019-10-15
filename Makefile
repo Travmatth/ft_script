@@ -13,7 +13,7 @@ LIBFT = libftprintf/libftprintf.a
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
 LDFLAGS = -Llibftprintf -lftprintf -I./includes -ltermcap
 IS_DEBUG =
-CORE = main parse_args pty
+CORE = main parse_args pty manage read
 
 FILES = $(addprefix src/, $(CORE))
 SRC = $(addsuffix .c, $(FILES))

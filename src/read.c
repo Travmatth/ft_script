@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   read.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/07 15:52:13 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/14 17:46:16 by tmatthew         ###   ########.fr       */
+/*   Created: 2019/10/14 17:43:06 by tmatthew          #+#    #+#             */
+/*   Updated: 2019/10/14 18:20:34 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
 
-int		main(int argc, char *argv[], char *envp[])
+// int		buffered_read(int master_fd, char buf[READ_BUF], int *bytes_read)
+int		buffered_read(int master_fd, char *c, int *bytes_read)
 {
-	t_context	ctx;
-	char		slave_name[20];
-	int			pid;
-	int			master_fd;
+	int		current;
 
-	if (parse_args(&ctx, argc, argv, envp) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if ((pid = open_pty(&master_fd, slave_name)) == -1)
-		return (EXIT_FAILURE);
-	else if (pid == 0 && manage_exec(&ctx, envp) == -1)
-		return (EXIT_FAILURE);
-	else
-		manage_pty(master_fd, ctx.typescript);
-	return (EXIT_SUCCESS);
+	// if ((current = read(master_fd, buf, READ_BUF)) == -1)
+	if ((current = read(master_fd, c, 1)) == -1)
+	{
+		DEBUG_LOG("read from src failed: %s\n", strerror(errno));
+		_exit(1);
+	}
+	ft_printf("buffered_read: %c\n", c);
+	*bytes_read += current;
+	return (current);
 }

@@ -6,7 +6,7 @@
         {
             "taskName": "build",
             "command": "make",
-            "args": ["TEST=1"],
+            "args": ["TEST=1", "debug"],
             "showOutput": "always",
             "isBuildCommand": true,
             "isShellCommand": true,
@@ -25,8 +25,8 @@
         },
         {
             "taskName": "clean",
-            "args": ["fclean"],
             "command": "make",
+            "args": ["fclean"],
             "showOutput": "always",
             "isBuildCommand": false,
             "isShellCommand": true,

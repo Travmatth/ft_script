@@ -6,19 +6,22 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 12:36:37 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/11 13:01:53 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/14 18:02:33 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../includes/ft_script.h"
 
-void	dup_close_stdio(int fd)
+void	dup_close_stdio(int master_fd, int fd)
 {
 	int		duped;
 
 	errno = 0;
-	if ((duped = dup2(fd, STDIN_FILENO)) == -1)
+	duped = -1;
+	if (close(master_fd) == -1)
+		DEBUG_LOG("error closing master_fd: %s", strerror(errno));
+	else if ((duped = dup2(fd, STDIN_FILENO)) == -1)
 		DEBUG_LOG("error duping slave to stdin: %s", strerror(errno));
 	else if ((duped = dup2(fd, STDOUT_FILENO)) == -1)
 		DEBUG_LOG("error duping slave to stdout: %s", strerror(errno));
@@ -36,10 +39,7 @@ int		open_pty_slave(char *slave_name)
 
 	errno = 0;
 	if ((slave_fd = open(slave_name, O_RDWR)) == -1)
-	{
 		DEBUG_LOG("Failed to open slave pty: %s\n", strerror(errno));
-		return (-1);
-	}
 	return (slave_fd);
 }
 
@@ -82,19 +82,19 @@ int		open_pty(int *fd, char *slave_name)
 	else if (pid == 0)
 	{
 		if (setsid() == -1)
+			DEBUG_LOG("setsid failed: %s\n", strerror(errno));
+		else if ((slave_fd = open_pty_slave(slave_name)) == -1)
+			DEBUG_LOG("open_pty_slave failed: %s\n", strerror(errno));
+		else
 		{
-			DEBUG_LOG("setsid failed: %s", strerror(errno));
-			_exit(1);
+			prep_pty(STDIN_FILENO);
+			dup_close_stdio(master_fd, slave_fd);
+			return (0);
 		}
-		else if ((slave_fd = open_pty_slave(slave_name)))
-		{
-			DEBUG_LOG("open_pty_slave failed: %s", strerror(errno));
-			_exit(1);
-		}
-		close(master_fd);
-		dup_close_stdio(slave_fd);
-		return (0);
+		_exit(1);
 	}
+	prep_pty(STDIN_FILENO);
+	DEBUG_LOG("open pty opened master at: %d\n", master_fd);
 	*fd = master_fd;
 	return (pid);
 }

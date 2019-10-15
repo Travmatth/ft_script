@@ -6,15 +6,31 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/11 13:01:28 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/14 17:46:11 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
 
+static void		log_command(t_context *ctx)
+{
+	int		i;
+	char	*log;
+	char	*key;
+
+	i = 0;
+	log = ctx->flags & LOG_KEYS ? "-k" : "";
+	key = ctx->flags & LOG_TIME ? "-t" : "";
+	DEBUG_LOG("./ft_script %s %s", log, key);
+	while (ctx->command && ctx->command[i])
+		DEBUG_LOG(" %s", ctx->command[i++]);
+	DEBUG_PRINT("\n");
+}
+
 static int		parse_command(t_context *ctx, char *argv[], char *envp[], int i)
 {
 	char	*file;
+	int		j;
 
 	file = argv[i] ? argv[i++] : "typescript";
 	if ((ctx->typescript = open(file, TYPESCRIPT_PERMS, 0666)) == -1)
@@ -24,35 +40,18 @@ static int		parse_command(t_context *ctx, char *argv[], char *envp[], int i)
 	}
 	if (argv[i])
 	{
-		ctx->command = argv[i++];
-		ctx->args = &argv[i];
+		ctx->command = &argv[i];
 		return (EXIT_SUCCESS);
 	}
-	i = 0;
-	while (envp[i] && ft_strncmp("SHELL", envp[i], 5))
-		i += 1;
-	if (!ft_strncmp("SHELL", envp[i], 5))
-		ctx->command = &envp[i][6];
 	else
-		ctx->command = "/bin/sh";
-	ctx->args = NULL;
+		i -= 1;
+	j = 0;
+	while (envp[j] && ft_strncmp("SHELL", envp[j], 5))
+		j += 1;
+	argv[0] = !ft_strncmp("SHELL", envp[j], 5) ? &envp[j][6] : "/bin/sh";
+	ctx->command = argv;
 	ctx->flags |= DFLT_SHELL;
 	return (EXIT_SUCCESS);
-}
-
-static void		log_command(t_context *ctx)
-{
-	int		i;
-	char	*log;
-	char	*key;
-
-	log = ctx->flags & LOG_KEYS ? "-k" : "";
-	key = ctx->flags & LOG_TIME ? "-t" : "";
-	DEBUG_LOG("./ft_script %s %s %s", log, key, ctx.command);
-	i = 0;
-	while (ctx->args && ctx->args[i])
-		DEBUG_LOG(" %s", ctx->args[i]);
-	DEBUG_PRINT("\n");
 }
 
 int				parse_args(t_context *ctx, int argc, char *argv[], char *envp[])
