@@ -6,11 +6,17 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:52:13 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/15 17:35:31 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 15:14:51 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
+
+void	script_exit(t_context *ctx, int status)
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &ctx->original_tty);
+	_exit(status);
+}
 
 int		main(int argc, char *argv[], char *envp[])
 {
@@ -21,7 +27,7 @@ int		main(int argc, char *argv[], char *envp[])
 
 	if (parse_args(&ctx, argc, argv, envp) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if ((pid = open_pty(&master_fd, slave_name)) == -1)
+	if ((pid = open_pty(&ctx, &master_fd, slave_name)) == -1)
 		return (EXIT_FAILURE);
 	else if (pid == 0 && manage_exec(&ctx, envp) == -1)
 		return (EXIT_FAILURE);

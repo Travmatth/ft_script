@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/15 17:31:58 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 15:14:51 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int					parse_args(t_context *ctx
 ** pty.c
 */
 
-int					open_pty(int *fd, char *slave_name);
+int					open_pty(t_context *ctx, int *fd, char *slave_name);
 int					manage_exec(t_context *ctx, char *envp[]);
 
 /*
@@ -63,6 +63,12 @@ int					manage_exec(t_context *ctx, char *envp[]);
 
 void				prep_pty(t_context *ctx, int fd);
 void				manage_pty(t_context *ctx, int master_fd);
+
+/*
+** main.c
+*/
+
+void				script_exit(t_context *ctx, int status);
 
 /*
 ** Debug statements used when compiled with __DEBUG__ variable defined

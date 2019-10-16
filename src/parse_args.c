@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/14 17:46:11 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 13:09:51 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int		parse_command(t_context *ctx, char *argv[], char *envp[], int i)
 	file = argv[i] ? argv[i++] : "typescript";
 	if ((ctx->typescript = open(file, TYPESCRIPT_PERMS, 0666)) == -1)
 	{
-		DEBUG_LOG(OPEN_ERR, file, strerror(errno));
+		ft_dprintf(STDERR_FILENO, OPEN_ERR, file, strerror(errno));
 		return (EXIT_FAILURE);
 	}
 	if (argv[i])
@@ -69,7 +69,7 @@ int				parse_args(t_context *ctx, int argc, char *argv[], char *envp[])
 				ctx->flags |= LOG_KEYS;
 			else if (argv[i] && argv[i][0] == '-' && argv[i][1])
 			{
-				ft_printf("ft_script: illegal option -- %c", argv[i][1]);
+				ft_printf("ft_script: illegal option -- %c\n", argv[i][1]);
 				return (EXIT_FAILURE);
 			}
 			else

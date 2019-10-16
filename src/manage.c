@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/15 18:03:20 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 15:18:25 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	prep_pty(t_context *ctx, int fd)
 	if (tcgetattr(fd, &ctx->original_tty))
 	{
 		ft_printf("Error getting slave terminal settings: %s", strerror(errno));
-		_exit(EXIT_FAILURE);
+		script_exit(ctx, EXIT_FAILURE);
 	}
 	slave_term = ctx->original_tty;
 	slave_term.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
@@ -40,20 +40,20 @@ void	prep_pty(t_context *ctx, int fd)
 	if (tcsetattr(fd, TCSANOW, &slave_term))
 	{
 		ft_printf("Error getting slave terminal settings: %s", strerror(errno));
-		_exit(EXIT_FAILURE);
+		script_exit(ctx, EXIT_FAILURE);
 	}
 }
 
-void	read_terminal_input(int master_fd, char buf[BUFSIZ])
+void	read_terminal_input(t_context *ctx, int master_fd, char buf[BUFSIZ])
 {
 	ssize_t	bytes;
 
 	if ((bytes = read(STDIN_FILENO, buf, BUFSIZ)) == -1)
-		_exit(EXIT_FAILURE);
+		script_exit(ctx, EXIT_FAILURE);
 	else if (bytes == 0)
-		_exit(EXIT_SUCCESS);
+		script_exit(ctx, EXIT_SUCCESS);
 	else if (write(master_fd, buf, bytes) != bytes)
-		_exit(EXIT_FAILURE);
+		script_exit(ctx, EXIT_FAILURE);
 }
 
 void	write_pty_output(t_context *ctx, int master_fd, char buf[BUFSIZ])
@@ -61,15 +61,15 @@ void	write_pty_output(t_context *ctx, int master_fd, char buf[BUFSIZ])
 	ssize_t	bytes;
 
 	if ((bytes = read(master_fd, buf, BUFSIZ)) == -1)
-		_exit(EXIT_SUCCESS);
+		script_exit(ctx, EXIT_SUCCESS);
 	else if (bytes == 0)
-		_exit(EXIT_SUCCESS);
+		script_exit(ctx, EXIT_SUCCESS);
 	buf[bytes] = '\n';
 	buf[bytes + 1] = '\0';
 	if (write(STDOUT_FILENO, buf, bytes) != bytes)
-		_exit(EXIT_FAILURE);
+		script_exit(ctx, EXIT_FAILURE);
 	else if (write(ctx->typescript, buf, bytes) != bytes)
-		_exit(EXIT_FAILURE);
+		script_exit(ctx, EXIT_FAILURE);
 }
 
 void	manage_pty(t_context *ctx, int master_fd)
@@ -84,9 +84,9 @@ void	manage_pty(t_context *ctx, int master_fd)
 		FD_SET(STDIN_FILENO, &fds);
 		FD_SET(master_fd, &fds);
 		if (select(master_fd + 1, &fds, NULL, NULL, NULL) == -1)
-			_exit(EXIT_FAILURE);
+			script_exit(ctx, EXIT_FAILURE);
 		if (FD_ISSET(STDIN_FILENO, &fds))
-			read_terminal_input(master_fd, buf);
+			read_terminal_input(ctx, master_fd, buf);
 		if (FD_ISSET(master_fd, &fds))
 			write_pty_output(ctx, master_fd, buf);
 	}
