@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 12:36:37 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/15 15:33:49 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:33:33 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	dup_close_stdio(int master_fd, int fd)
 	else if ((duped = dup2(fd, STDERR_FILENO)) == -1)
 		DEBUG_LOG("error duping slave to stderr: %s", strerror(errno));
 	if (duped == -1)
-		_exit(1);
+		_exit(EXIT_FAILURE);
 	else if (fd != STDIN_FILENO && fd != STDOUT_FILENO && fd != STDERR_FILENO)
 		close(fd);
 }
@@ -81,7 +81,7 @@ int		open_pty(int *fd, char *slave_name)
 			dup_close_stdio(master_fd, slave_fd);
 			return (0);
 		}
-		_exit(1);
+		_exit(EXIT_FAILURE);
 	}
 	DEBUG_LOG("open pty opened master at: %d\n", master_fd);
 	*fd = master_fd;

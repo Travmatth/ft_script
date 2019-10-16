@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/15 15:22:39 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:31:58 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,24 @@
 # define OPEN_ERR "ft_script: error opening %s due to error: %s\n"
 # define PASS (void)0
 
-enum			e_script_flags {
+enum				e_script_flags {
 	LOG_TIME = (1u << 0),
 	LOG_KEYS = (1u << 1),
 	DFLT_SHELL = (1u << 2),
 };
 
-typedef	struct	s_context {
-	unsigned	flags;
-	int			typescript;
-	char		**command;
-}				t_context;
+typedef	struct		s_context {
+	unsigned		flags;
+	int				typescript;
+	char			**command;
+	struct termios	original_tty;
+}					t_context;
 
 /*
 ** parse_args.c
 */
 
-int				parse_args(t_context *ctx
+int					parse_args(t_context *ctx
 							, int argc
 							, char *argv[]
 							, char *envp[]);
@@ -53,15 +54,15 @@ int				parse_args(t_context *ctx
 ** pty.c
 */
 
-int				open_pty(int *fd, char *slave_name);
-int				manage_exec(t_context *ctx, char *envp[]);
+int					open_pty(int *fd, char *slave_name);
+int					manage_exec(t_context *ctx, char *envp[]);
 
 /*
 ** manage.c
 */
 
-void			prep_pty(int fd);
-void			manage_pty(int master_fd, int typescript);
+void				prep_pty(t_context *ctx, int fd);
+void				manage_pty(t_context *ctx, int master_fd);
 
 /*
 ** Debug statements used when compiled with __DEBUG__ variable defined

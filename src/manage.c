@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/15 15:23:14 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/15 18:03:20 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,73 @@ int		manage_exec(t_context *ctx, char *envp[])
 	return (-1);
 }
 
-void	prep_pty(int fd)
+void	prep_pty(t_context *ctx, int fd)
 {
 	struct termios	slave_term;
 
 	errno = 0;
-	if (tcgetattr(fd, &slave_term))
+	if (tcgetattr(fd, &ctx->original_tty))
 	{
 		ft_printf("Error getting slave terminal settings: %s", strerror(errno));
-		_exit(1);
+		_exit(EXIT_FAILURE);
 	}
-	slave_term.c_lflag &= ~(ECHO | ECHOE | ECHOK | ECHONL | ICANON);
-	slave_term.c_oflag &= ~(ONLCR);
+	slave_term = ctx->original_tty;
+	slave_term.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
+	slave_term.c_iflag &= ~(BRKINT | ICRNL | IGNBRK | IGNCR | INLCR | INPCK | ISTRIP | IXON | PARMRK);
+	slave_term.c_oflag &= ~(OPOST);
 	slave_term.c_cc[VMIN] = 1;
 	slave_term.c_cc[VTIME] = 0;
 	if (tcsetattr(fd, TCSANOW, &slave_term))
 	{
 		ft_printf("Error getting slave terminal settings: %s", strerror(errno));
-		_exit(1);
+		_exit(EXIT_FAILURE);
 	}
 }
 
-void	manage_pty(int master_fd, int typescript)
+void	read_terminal_input(int master_fd, char buf[BUFSIZ])
 {
-	(void)master_fd;
-	(void)typescript;
+	ssize_t	bytes;
+
+	if ((bytes = read(STDIN_FILENO, buf, BUFSIZ)) == -1)
+		_exit(EXIT_FAILURE);
+	else if (bytes == 0)
+		_exit(EXIT_SUCCESS);
+	else if (write(master_fd, buf, bytes) != bytes)
+		_exit(EXIT_FAILURE);
+}
+
+void	write_pty_output(t_context *ctx, int master_fd, char buf[BUFSIZ])
+{
+	ssize_t	bytes;
+
+	if ((bytes = read(master_fd, buf, BUFSIZ)) == -1)
+		_exit(EXIT_SUCCESS);
+	else if (bytes == 0)
+		_exit(EXIT_SUCCESS);
+	buf[bytes] = '\n';
+	buf[bytes + 1] = '\0';
+	if (write(STDOUT_FILENO, buf, bytes) != bytes)
+		_exit(EXIT_FAILURE);
+	else if (write(ctx->typescript, buf, bytes) != bytes)
+		_exit(EXIT_FAILURE);
+}
+
+void	manage_pty(t_context *ctx, int master_fd)
+{
+	fd_set	fds;
+	char	buf[BUFSIZ];
+
+	prep_pty(ctx, STDIN_FILENO);
+	while (1)
+	{
+		FD_ZERO(&fds);
+		FD_SET(STDIN_FILENO, &fds);
+		FD_SET(master_fd, &fds);
+		if (select(master_fd + 1, &fds, NULL, NULL, NULL) == -1)
+			_exit(EXIT_FAILURE);
+		if (FD_ISSET(STDIN_FILENO, &fds))
+			read_terminal_input(master_fd, buf);
+		if (FD_ISSET(master_fd, &fds))
+			write_pty_output(ctx, master_fd, buf);
+	}
 }

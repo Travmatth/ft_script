@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:52:13 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/14 17:46:16 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:35:31 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ int		main(int argc, char *argv[], char *envp[])
 	else if (pid == 0 && manage_exec(&ctx, envp) == -1)
 		return (EXIT_FAILURE);
 	else
-		manage_pty(master_fd, ctx.typescript);
+		manage_pty(&ctx, master_fd);
 	return (EXIT_SUCCESS);
 }
