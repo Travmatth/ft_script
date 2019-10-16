@@ -1,13 +1,14 @@
-ft_printf:
+# FT_SCRIPT
 
-Approach:
-    A recursive descent parser to convert formatting strings into an
-array of formatting specifiers, which are then reduced into a single
-output string
+ft_script is a simple recreation of the (script(1))[] command, designed to expolore the usage of pseudo-terminals in posix environments. ft_script sets up a pseudoterminal pair, where the slave is executed with the command specified by the invocation, or the value of $SHELL, or `/bin/sh` failing that. Input written to the shell is then forwarded to the pty slave, and the output of the slave is forwarded to the pty master, where it is written to the shell. All output written to the shell is duplicated to the specified file (or `typescript` if none provided), so that said file contains a record of the session started by `./ft_script`.    
 
-Bonuses:
-1: * for width/prec
-2: ability to register custom conversion functions, and swap out the default
-    conversion specifiers (see `ftprintf_register_cnv`)
-3: partial linking -> only the functions listed in `srcs/exported.sym` are
-    exported by the linker, all others are not
+## Installation
+```
+git clone https://github.com/travmatth/ft_script
+make
+```
+
+## Usage
+```
+./ft_script [-kt] [file [command ...]]
+```
