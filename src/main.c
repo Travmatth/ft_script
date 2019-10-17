@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:52:13 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/16 15:14:51 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 17:28:04 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	script_exit(t_context *ctx, int status)
 {
 	tcsetattr(STDIN_FILENO, TCSANOW, &ctx->original_tty);
+	if (status == EXIT_SUCCESS)
+		ft_printf("Script done, output file is %s\n", ctx->typescript);
 	_exit(status);
 }
 

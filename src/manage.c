@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/16 17:25:42 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 17:28:08 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int		manage_exec(t_context *ctx, char *envp[])
 {
 	errno = 0;
+	ft_printf("Script started, output file is %s\n", ctx->typescript);
 	execve(ctx->command[0], ctx->command, envp);
 	ft_printf("ft_script: %s: %s\n", ctx->command[0], strerror(errno));
 	return (-1);
