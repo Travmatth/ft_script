@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/16 17:15:02 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 17:25:42 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	prep_pty(t_context *ctx, int fd)
 	}
 	slave_term = ctx->original_tty;
 	slave_term.c_lflag &= ~(ECHO | ICANON | ISIG | IEXTEN);
-	slave_term.c_iflag &= ~(BRKINT | ICRNL | IGNBRK | IGNCR | INLCR | INPCK | ISTRIP | IXON | PARMRK);
+	slave_term.c_iflag &= ~I_FLAGS;
 	slave_term.c_oflag &= ~(OPOST);
 	slave_term.c_cc[VMIN] = 1;
 	slave_term.c_cc[VTIME] = 0;
@@ -62,7 +62,7 @@ void	write_pty_output(t_context *ctx, int master_fd, char buf[BUFSIZ])
 {
 	ssize_t	bytes;
 
-	if ((bytes = read(master_fd, buf, BUFSIZ)) == -1)
+	if ((bytes = read(master_fd, buf, BUFSIZ - 2)) == -1)
 		script_exit(ctx, EXIT_SUCCESS);
 	else if (bytes == 0)
 		script_exit(ctx, EXIT_SUCCESS);

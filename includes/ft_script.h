@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/16 15:14:51 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 17:17:34 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # define TYPESCRIPT_PERMS (O_WRONLY | O_CREAT | O_APPEND)
 # define OPEN_ERR "ft_script: error opening %s due to error: %s\n"
 # define PASS (void)0
+# define FLAGS (BRKINT | ICRNL | IGNBRK | IGNCR | INLCR)
+# define I_FLAGS ((FLAGS | INPCK | ISTRIP | IXON | PARMRK))
 
 enum				e_script_flags {
 	LOG_TIME = (1u << 0),
