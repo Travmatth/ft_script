@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/16 15:18:25 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 17:02:48 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		manage_exec(t_context *ctx, char *envp[])
 	errno = 0;
 	DEBUG_LOG("execve: %s\n", ctx->command[0]);
 	execve(ctx->command[0], ctx->command, envp);
-	DEBUG_LOG("execve failed: %s\n", strerror(errno));
+	ft_printf("ft_script: %s: %s", ctx->command[0], , strerror(errno));
 	return (-1);
 }
 

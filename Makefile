@@ -43,7 +43,7 @@ $(NAME): $(LIBFT) $(OBJ)
 clean:
 	@$(MAKE) clean -C libftprintf
 	@echo -n 'Cleaning ft_script object files... '
-	@rm -f $(OBJ) *.dSYM *.DS_Store
+	@rm -f $(OBJ) *.dSYM *.DS_Store typescript
 	@echo "\033[32mdone\033[0m"
 
 fclean: clean
