@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/16 17:11:48 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/16 17:15:02 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ int		manage_exec(t_context *ctx, char *envp[])
 
 void	prep_pty(t_context *ctx, int fd)
 {
+	char			*err;
 	struct termios	slave_term;
 
 	errno = 0;
 	if (tcgetattr(fd, &ctx->original_tty))
 	{
-		ft_printf("Error getting slave terminal settings: %s", strerror(errno));
+		err = strerror(errno);
+		DEBUG_LOG("Error getting slave terminal settings: %s\n", err);
 		script_exit(ctx, EXIT_FAILURE);
 	}
 	slave_term = ctx->original_tty;
@@ -38,7 +40,8 @@ void	prep_pty(t_context *ctx, int fd)
 	slave_term.c_cc[VTIME] = 0;
 	if (tcsetattr(fd, TCSANOW, &slave_term))
 	{
-		ft_printf("Error getting slave terminal settings: %s", strerror(errno));
+		err = strerror(errno);
+		DEBUG_LOG("Error setting slave terminal settings: %s\n", err);
 		script_exit(ctx, EXIT_FAILURE);
 	}
 }
