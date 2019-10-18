@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 12:36:37 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/16 17:28:49 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/17 17:12:49 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ void	dup_close_stdio(t_context *ctx, int master_fd, int fd)
 
 	errno = 0;
 	duped = -1;
-	if (close(master_fd) == -1)
+	if (close(master_fd) == ERROR)
 		DEBUG_LOG("error closing master_fd: %s\n", strerror(errno));
-	else if ((duped = dup2(fd, STDIN_FILENO)) == -1)
+	else if ((duped = dup2(fd, STDIN_FILENO)) == ERROR)
 		DEBUG_LOG("error duping slave to stdin: %s\n", strerror(errno));
-	else if ((duped = dup2(fd, STDOUT_FILENO)) == -1)
+	else if ((duped = dup2(fd, STDOUT_FILENO)) == ERROR)
 		DEBUG_LOG("error duping slave to stdout: %s\n", strerror(errno));
-	else if ((duped = dup2(fd, STDERR_FILENO)) == -1)
+	else if ((duped = dup2(fd, STDERR_FILENO)) == ERROR)
 		DEBUG_LOG("error duping slave to stderr: %s\n", strerror(errno));
-	if (duped == -1)
+	if (duped == ERROR)
 		script_exit(ctx, EXIT_FAILURE);
 	else if (fd != STDIN_FILENO && fd != STDOUT_FILENO && fd != STDERR_FILENO)
 		close(fd);
@@ -39,14 +39,14 @@ int		open_pty_master(char *slave_name)
 	char	*slave;
 
 	errno = 0;
-	if ((master_pty = posix_openpt(O_RDWR)) == -1)
+	if ((master_pty = posix_openpt(O_RDWR)) == ERROR)
 	{
 		DEBUG_LOG("posix_openpt failed: %s\n", strerror(errno));
-		return (-1);
+		return (ERROR);
 	}
-	else if (grantpt(master_pty) == -1)
+	else if (grantpt(master_pty) == ERROR)
 		DEBUG_LOG("grantpt failed: %s\n", strerror(errno));
-	else if (unlockpt(master_pty) == -1)
+	else if (unlockpt(master_pty) == ERROR)
 		DEBUG_LOG("unlockpt failed: %s\n", strerror(errno));
 	else if (!(slave = ptsname(master_pty)))
 		DEBUG_LOG("ptsname failed: %s\n", strerror(errno));
@@ -57,7 +57,7 @@ int		open_pty_master(char *slave_name)
 		return (master_pty);
 	}
 	close(master_pty);
-	return (-1);
+	return (ERROR);
 }
 
 int		open_pty(t_context *ctx, int *fd, char *slave_name)
@@ -67,14 +67,14 @@ int		open_pty(t_context *ctx, int *fd, char *slave_name)
 	int		slave_fd;
 
 	errno = 0;
-	if (((master_fd = open_pty_master(slave_name)) == -1)
-		|| ((pid = fork()) == -1))
+	if (((master_fd = open_pty_master(slave_name)) == ERROR)
+		|| ((pid = fork()) == ERROR))
 		return (EXIT_FAILURE);
 	else if (pid == 0)
 	{
-		if (setsid() == -1)
+		if (setsid() == ERROR)
 			DEBUG_LOG("setsid failed: %s\n", strerror(errno));
-		else if ((slave_fd = open(slave_name, O_RDWR)) == -1)
+		else if ((slave_fd = open(slave_name, O_RDWR)) == ERROR)
 			DEBUG_LOG("Failed to open slave pty: %s\n", strerror(errno));
 		else
 		{

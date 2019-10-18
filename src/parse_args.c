@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/17 16:57:27 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/17 17:12:49 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void		log_command(t_context *ctx)
 static int		parse_command(t_context *ctx, char *argv[], char *envp[], int i)
 {
 	ctx->ts_name = argv[i] ? argv[i++] : "typescript";
-	if ((ctx->typescript = open(ctx->ts_name, TS_PERMS, 0666)) == -1)
+	if ((ctx->typescript = open(ctx->ts_name, TS_PERMS, 0666)) == ERROR)
 	{
 		ft_dprintf(STDERR_FILENO, OPEN_ERR, ctx->ts_name, strerror(errno));
 		return (EXIT_FAILURE);

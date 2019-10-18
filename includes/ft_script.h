@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/17 16:48:42 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/17 17:56:11 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int					manage_exec(t_context *ctx, char *envp[]);
 ** manage.c
 */
 
-void				prep_pty(t_context *ctx, int fd);
+int					prep_pty(t_context *ctx, int fd);
 void				manage_pty(t_context *ctx, int master_fd);
 
 /*
@@ -69,6 +69,8 @@ void				manage_pty(t_context *ctx, int master_fd);
 */
 
 void				script_exit(t_context *ctx, int status);
+int					script_prologue(t_context *ctx);
+void				script_epilogue(t_context *ctx);
 
 /*
 ** Debug statements used when compiled with __DEBUG__ variable defined
