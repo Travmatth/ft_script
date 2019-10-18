@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/16 13:09:51 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/17 16:57:27 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,34 +23,33 @@ static void		log_command(t_context *ctx)
 	key = ctx->flags & LOG_TIME ? "-t" : "";
 	DEBUG_LOG("./ft_script %s %s", log, key);
 	while (ctx->command && ctx->command[i])
-		DEBUG_LOG(" %s", ctx->command[i++]);
+	{
+		DEBUG_LOG(" %s", ctx->command[i]);
+		i += 1;
+	}
 	DEBUG_PRINT("\n");
 }
 
 static int		parse_command(t_context *ctx, char *argv[], char *envp[], int i)
 {
-	char	*file;
-	int		j;
-
-	file = argv[i] ? argv[i++] : "typescript";
-	if ((ctx->typescript = open(file, TYPESCRIPT_PERMS, 0666)) == -1)
+	ctx->ts_name = argv[i] ? argv[i++] : "typescript";
+	if ((ctx->typescript = open(ctx->ts_name, TS_PERMS, 0666)) == -1)
 	{
-		ft_dprintf(STDERR_FILENO, OPEN_ERR, file, strerror(errno));
+		ft_dprintf(STDERR_FILENO, OPEN_ERR, ctx->ts_name, strerror(errno));
 		return (EXIT_FAILURE);
 	}
 	if (argv[i])
 	{
 		ctx->command = &argv[i];
-		return (EXIT_SUCCESS);
 	}
 	else
-		i -= 1;
-	j = 0;
-	while (envp[j] && ft_strncmp("SHELL", envp[j], 5))
-		j += 1;
-	argv[0] = !ft_strncmp("SHELL", envp[j], 5) ? &envp[j][6] : "/bin/sh";
-	ctx->command = argv;
-	ctx->flags |= DFLT_SHELL;
+	{
+		i = 0;
+		while (envp[i] && ft_strncmp("SHELL", envp[i], 5))
+			i += 1;
+		argv[0] = !ft_strncmp("SHELL", envp[i], 5) ? &envp[i][6] : "/bin/sh";
+		ctx->command = argv;
+	}
 	return (EXIT_SUCCESS);
 }
 
