@@ -12,6 +12,9 @@
             "env": {
                 "SHELL": "/bin/zsh"
             },
+            "setupCommands": [
+                { "text": "settings set target.input-path test/input.txt" }
+            ],
             "preLaunchTask": "build",
             "externalConsole": false,
             "linux": {
