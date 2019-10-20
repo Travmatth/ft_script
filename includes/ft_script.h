@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/17 17:56:11 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/20 14:44:19 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,15 @@ typedef	struct		s_context {
 ** parse_args.c
 */
 
-int					parse_args(t_context *ctx
-							, int argc
-							, char *argv[]
-							, char *envp[]);
+char				*get_env_var(char *const envp[], const char *name);
+int					parse_args(t_context *ctx, char *argv[], char *const envp[]);
 
 /*
 ** pty.c
 */
 
 int					open_pty(t_context *ctx, int *fd, char *slave_name);
-int					manage_exec(t_context *ctx, char *envp[]);
+int					manage_exec(t_context *ctx, char *const envp[]);
 
 /*
 ** manage.c
@@ -65,7 +63,13 @@ int					prep_pty(t_context *ctx, int fd);
 void				manage_pty(t_context *ctx, int master_fd);
 
 /*
-** main.c
+** find.c
+*/
+
+int					find_executable(char path[BUFSIZ], char *exec, char *const envp[]);
+
+/*
+** lifecycle.c
 */
 
 void				script_exit(t_context *ctx, int status);

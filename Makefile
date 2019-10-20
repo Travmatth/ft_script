@@ -11,9 +11,12 @@ endif
 NAME = ft_script
 LIBFT = libftprintf/libftprintf.a
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
-LDFLAGS = -Llibftprintf -lftprintf -I./includes -ltermcap
+LDFLAGS = -Llibftprintf -lftprintf -I./includes
 IS_DEBUG =
-CORE = main parse_args pty manage
+MAIN = src/main.c
+TEST_FILE = test/test_utils.c
+TEST_NAME = test/test_utils
+CORE = parse_args pty manage find lifecycle
 
 FILES = $(addprefix src/, $(CORE))
 SRC = $(addsuffix .c, $(FILES))
@@ -24,6 +27,11 @@ OBJ = $(SRC:.c=.o)
 all: $(SUBMODULES) $(NAME)
 
 debug: set-debug all
+
+test_utils: set-debug all
+	@echo -n 'Compiling ft_script tests... '
+	@$(CC) $(IS_DEBUG) $(DEBUG) $(CFLAGS) $(LDFLAGS) $(OBJ) $(TEST_FILE) -o $(TEST_NAME)
+	@echo "\033[32mdone\033[0m"
 
 set-debug:
 	@echo 'Compiling ft_script with debugging logs enabled'
@@ -37,19 +45,19 @@ $(OBJ): %.o: %.c
 
 $(NAME): $(LIBFT) $(OBJ)
 	@echo -n 'Compiling ft_script... '
-	@$(CC) $(IS_DEBUG) $(DEBUG) $(CFLAGS) $(LDFLAGS) $(OBJ) -o $@
+	@$(CC) $(IS_DEBUG) $(DEBUG) $(CFLAGS) $(LDFLAGS) $(OBJ) $(MAIN) -o $@
 	@echo "\033[32mdone\033[0m"
 
 clean:
 	@$(MAKE) clean -C libftprintf
 	@echo -n 'Cleaning ft_script object files... '
-	@rm -f $(OBJ) *.dSYM *.DS_Store typescript
+	@rm -rf $(OBJ) *.dSYM test/*.dSYM *.DS_Store typescript
 	@echo "\033[32mdone\033[0m"
 
 fclean: clean
 	@$(MAKE) fclean -C libftprintf
 	@echo -n 'Cleaning ft_script executable... '
-	@rm -f $(NAME)
+	@rm -rf $(NAME) $(TEST_NAME)
 	@echo "\033[32mdone\033[0m"
 
 re: fclean all

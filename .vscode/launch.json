@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "C++ Launch",
+            "name": "ft_script launch",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceRoot}/ft_script",
@@ -10,12 +10,53 @@
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "env": {
-                "SHELL": "/bin/zsh"
+				"SHELL": "/bin/zsh"
             },
             "setupCommands": [
                 { "text": "settings set target.input-path test/input.txt" }
             ],
             "preLaunchTask": "build",
+            "externalConsole": false,
+            "linux": {
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            "osx": {
+                "MIMode": "lldb"
+            },
+            "windows": {
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            }
+        },
+        {
+            "name": "test find_exec launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/test/test_utils",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "env": {
+                "SHELL": "/bin/zsh",
+				"PATH": "/nfs/2018/t/tmatthew/space_cadet/go/bin:/nfs/2018/t/tmatthew/space_cadet:/nfs/2018/t/tmatthew/.brew/bin:/nfs/2018/t/tmatthew/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/munki"
+            },
+            "setupCommands": [
+                { "text": "settings set target.input-path test/input.txt" }
+            ],
+            "preLaunchTask": "build-test",
             "externalConsole": false,
             "linux": {
                 "MIMode": "gdb",

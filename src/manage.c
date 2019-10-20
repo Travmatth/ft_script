@@ -6,21 +6,28 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/17 18:00:00 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/20 15:14:25 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
 
-int		manage_exec(t_context *ctx, char *envp[])
+int		manage_exec(t_context *ctx, char *const envp[])
 {
-	time_t	cur;
+	char	path[BUFSIZ];
 
 	errno = 0;
-	time(&cur);
-	ft_putstr_fd("Script started on ", ctx->typescript);
-	ft_putstr_fd(ctime(&cur), ctx->typescript);
-	execve(ctx->command[0], ctx->command, envp);
+	if (find_executable(path, ctx->command[0], envp) == EXIT_SUCCESS)
+		execve(path, ctx->command, envp);
+	else
+	{
+		ft_putstr_fd("ft_script: ", ctx->typescript);
+		ft_putstr_fd(ctx->command[0], ctx->typescript);
+		ft_putstr_fd(": No such file or directory\n", ctx->typescript);
+		ft_putstr("ft_script: ");
+		ft_putstr(ctx->command[0]);
+		ft_putstr(": No such file or directory\n");
+	}
 	ft_putstr_fd("ft_script: ", ctx->typescript);
 	ft_putstr_fd(ctx->command[0], ctx->typescript);
 	ft_putstr_fd(" : ", ctx->typescript);

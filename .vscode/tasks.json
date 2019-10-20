@@ -24,13 +24,33 @@
             }
         },
         {
+            "taskName": "build-test",
+            "command": "make",
+            "args": ["TEST=1", "test_utils"],
+            "showOutput": "always",
+            "isBuildCommand": true,
+            "isShellCommand": true,
+            "problemMatcher": {
+                "owner": "c",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
             "taskName": "clean",
             "command": "make",
             "args": ["fclean"],
             "showOutput": "always",
             "isBuildCommand": false,
             "isShellCommand": true,
-            "isWatching": false
+            "isBackground": false
         }
     ]
 }
