@@ -6,27 +6,34 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 12:31:28 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/20 15:14:48 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 01:21:41 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
 
+char	*get_time(t_context *ctx)
+{
+	struct timeval	timestamp;
+
+	if (gettimeofday(&timestamp, NULL) == ERROR)
+		script_exit(ctx, EXIT_FAILURE);
+	return (ctime(&timestamp.tv_sec));
+}
+
 void	script_exit(t_context *ctx, int status)
 {
-	tcsetattr(STDIN_FILENO, TCSANOW, &ctx->original_tty);
+	ioctl(STDIN_FILENO, TIOCSETA, &ctx->original_tty);
 	_exit(status);
 }
 
 int		script_prologue(t_context *ctx)
 {
 	int		i;
-	time_t	cur;
 
 	i = 0;
-	time(&cur);
 	ft_putstr_fd("Script started on ", ctx->typescript);
-	ft_putstr_fd(ctime(&cur), ctx->typescript);
+	ft_putstr_fd(get_time(ctx), ctx->typescript);
 	ft_putstr_fd("command:", ctx->typescript);
 	ft_putstr("Script started, output file is ");
 	ft_putendl(ctx->ts_name);
@@ -41,12 +48,9 @@ int		script_prologue(t_context *ctx)
 
 void	script_epilogue(t_context *ctx)
 {
-	time_t	cur;
-
-	tcsetattr(STDIN_FILENO, TCSANOW, &ctx->original_tty);
-	time(&cur);
+	ioctl(STDIN_FILENO, TIOCSETA, &ctx->original_tty);
 	ft_putstr_fd("\nScript done on ", ctx->typescript);
-	ft_putstr_fd(ctime(&cur), ctx->typescript);
+	ft_putstr_fd(get_time(ctx), ctx->typescript);
 	ft_putstr("\nScript done, output file is ");
 	ft_putstr(ctx->ts_name);
 	ft_putstr("\n");

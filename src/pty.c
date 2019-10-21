@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 12:36:37 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/17 17:12:49 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 00:13:30 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,19 @@ void	dup_close_stdio(t_context *ctx, int master_fd, int fd)
 int		open_pty_master(char *slave_name)
 {
 	int		master_pty;
-	char	*slave;
+	char	slave[BUFSIZ];
 
 	errno = 0;
-	if ((master_pty = posix_openpt(O_RDWR)) == ERROR)
+	if ((master_pty = open("/dev/ptmx", O_RDWR)) == ERROR)
 	{
 		DEBUG_LOG("posix_openpt failed: %s\n", strerror(errno));
 		return (ERROR);
 	}
-	else if (grantpt(master_pty) == ERROR)
+	else if (ioctl(master_pty, TIOCPTYGRANT) == ERROR)
 		DEBUG_LOG("grantpt failed: %s\n", strerror(errno));
-	else if (unlockpt(master_pty) == ERROR)
+	else if (ioctl(master_pty, TIOCPTYUNLK) == ERROR)
 		DEBUG_LOG("unlockpt failed: %s\n", strerror(errno));
-	else if (!(slave = ptsname(master_pty)))
+	else if (ioctl(master_pty, TIOCPTYGNAME, slave) == ERROR)
 		DEBUG_LOG("ptsname failed: %s\n", strerror(errno));
 	else
 	{

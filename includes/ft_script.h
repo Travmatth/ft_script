@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/20 14:44:19 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 01:18:00 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <string.h>
 # include <signal.h>
 # include <termios.h>
+# include <sys/ioctl.h>
+# include <sys/time.h>
 
 # define TS_PERMS (O_WRONLY | O_CREAT | O_TRUNC)
 # define OPEN_ERR "ft_script: error opening %s due to error: %s\n"

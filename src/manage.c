@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/20 15:14:25 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 00:25:58 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		prep_pty(t_context *ctx, int fd)
 	struct termios	slave_term;
 
 	errno = 0;
-	if (tcgetattr(fd, &ctx->original_tty))
+	if (ioctl(fd, TIOCGETA, &ctx->original_tty))
 	{
 		err = strerror(errno);
 		DEBUG_LOG("Error getting slave terminal settings: %s\n", err);
@@ -54,7 +54,7 @@ int		prep_pty(t_context *ctx, int fd)
 	slave_term.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
 	slave_term.c_cflag &= ~(CSIZE | PARENB);
 	slave_term.c_cflag |= CS8;
-	if (tcsetattr(fd, TCSANOW, &slave_term))
+	if (ioctl(fd, TIOCSETA, &slave_term))
 	{
 		err = strerror(errno);
 		DEBUG_LOG("Error setting slave terminal settings: %s\n", err);
