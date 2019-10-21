@@ -6,10 +6,9 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 12:36:37 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 00:13:30 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 01:29:16 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/ft_script.h"
 

@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 01:18:00 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 02:13:50 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ typedef	struct		s_context {
 */
 
 char				*get_env_var(char *const envp[], const char *name);
-int					parse_args(t_context *ctx, char *argv[], char *const envp[]);
+int					parse_args(t_context *ctx
+								, char *argv[]
+								, char *const envp[]);
 
 /*
 ** pty.c
@@ -68,7 +70,9 @@ void				manage_pty(t_context *ctx, int master_fd);
 ** find.c
 */
 
-int					find_executable(char path[BUFSIZ], char *exec, char *const envp[]);
+int					find_executable(char path[BUFSIZ]
+									, char *exec
+									, char *const envp[]);
 
 /*
 ** lifecycle.c
