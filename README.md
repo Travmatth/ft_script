@@ -12,3 +12,11 @@ make
 ```
 ./ft_script [-kt] [file [command ...]]
 ```
+
+## Resources
+
+- Advanced Programming in the Unix Environment: Chapter 19: Pseudo Terminals
+- The Linux Programming Interface: Chapter 64: Pseudoterminals
+- Pty implementation: [grantpt.c](https://opensource.apple.com/source/Libc/Libc-825.25/stdlib/grantpt.c)
+- Time implementation: [time.c](https://code.woboq.org/userspace/glibc/sysdeps/unix/sysv/linux/tcsetattr.c.html)
+- IOCTL syscalls: [IOCTL List](https://www.freebsd.org/cgi/man.cgi?query=tty&sektion=4)
