@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:52:13 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/19 13:37:02 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 03:18:18 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ int		main(int argc, char *argv[], char *envp[])
 	int			pid;
 	int			master_fd;
 
-	(void)argc;
-	if (parse_args(&ctx, argv, envp) == EXIT_FAILURE)
+	ctx.flags = 0;
+	if (parse_args(&ctx, argc, argv, envp) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if ((pid = open_pty(&ctx, &master_fd, slave_name)) == ERROR)
 		return (EXIT_FAILURE);

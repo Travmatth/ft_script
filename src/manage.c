@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 00:25:58 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 16:41:56 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		manage_exec(t_context *ctx, char *const envp[])
 	errno = 0;
 	if (find_executable(path, ctx->command[0], envp) == EXIT_SUCCESS)
 		execve(path, ctx->command, envp);
-	else
+	else if (!(ctx->flags & FLAG_QUIET))
 	{
 		ft_putstr_fd("ft_script: ", ctx->typescript);
 		ft_putstr_fd(ctx->command[0], ctx->typescript);
@@ -28,10 +28,13 @@ int		manage_exec(t_context *ctx, char *const envp[])
 		ft_putstr(ctx->command[0]);
 		ft_putstr(": No such file or directory\n");
 	}
-	ft_putstr_fd("ft_script: ", ctx->typescript);
-	ft_putstr_fd(ctx->command[0], ctx->typescript);
-	ft_putstr_fd(" : ", ctx->typescript);
-	ft_putendl_fd(strerror(errno), ctx->typescript);
+	if (!(ctx->flags & FLAG_QUIET))
+	{
+		ft_putstr_fd("ft_script: ", ctx->typescript);
+		ft_putstr_fd(ctx->command[0], ctx->typescript);
+		ft_putstr_fd(" : ", ctx->typescript);
+		ft_putendl_fd(strerror(errno), ctx->typescript);
+	}
 	return (ERROR);
 }
 
@@ -98,7 +101,8 @@ void	manage_pty(t_context *ctx, int master_fd)
 	fd_set	fds;
 	char	buf[BUFSIZ];
 
-	if (script_prologue(ctx) == EXIT_FAILURE)
+	script_prologue(ctx);
+	if (prep_pty(ctx, STDIN_FILENO) == EXIT_FAILURE)
 	{
 		tcsetattr(STDIN_FILENO, TCSANOW, &ctx->original_tty);
 		return ;

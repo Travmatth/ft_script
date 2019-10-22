@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 12:31:28 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 01:21:41 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 16:40:18 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,31 +27,36 @@ void	script_exit(t_context *ctx, int status)
 	_exit(status);
 }
 
-int		script_prologue(t_context *ctx)
+void		script_prologue(t_context *ctx)
 {
 	int		i;
 
 	i = 0;
-	ft_putstr_fd("Script started on ", ctx->typescript);
-	ft_putstr_fd(get_time(ctx), ctx->typescript);
-	ft_putstr_fd("command:", ctx->typescript);
-	ft_putstr("Script started, output file is ");
-	ft_putendl(ctx->ts_name);
-	while (ctx->command && ctx->command[i])
+	if (!(ctx->flags & FLAG_QUIET))
 	{
-		ft_putstr_fd(" ", ctx->typescript);
-		ft_putstr_fd(ctx->command[i++], ctx->typescript);
+		ft_putstr_fd("Script started on ", ctx->typescript);
+		ft_putstr_fd(get_time(ctx), ctx->typescript);
+		ft_putstr_fd("command:", ctx->typescript);
+		ft_putstr("Script started, output file is ");
+		ft_putendl(ctx->ts_name);
+		while (ctx->command && ctx->command[i])
+		{
+			ft_putstr_fd(" ", ctx->typescript);
+			ft_putstr_fd(ctx->command[i++], ctx->typescript);
+		}
+		ft_putstr_fd("\n", ctx->typescript);
 	}
-	ft_putstr_fd("\n", ctx->typescript);
-	return (prep_pty(ctx, STDIN_FILENO));
 }
 
 void	script_epilogue(t_context *ctx)
 {
 	ioctl(STDIN_FILENO, TIOCSETA, &ctx->original_tty);
-	ft_putstr_fd("\nScript done on ", ctx->typescript);
-	ft_putstr_fd(get_time(ctx), ctx->typescript);
-	ft_putstr("\nScript done, output file is ");
-	ft_putstr(ctx->ts_name);
-	ft_putstr("\n");
+	if (!(ctx->flags & FLAG_QUIET))
+	{
+		ft_putstr_fd("\nScript done on ", ctx->typescript);
+		ft_putstr_fd(get_time(ctx), ctx->typescript);
+		ft_putstr("\nScript done, output file is ");
+		ft_putstr(ctx->ts_name);
+		ft_putstr("\n");
+	}
 }

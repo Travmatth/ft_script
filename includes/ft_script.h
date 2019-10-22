@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 02:13:50 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/21 02:56:06 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@
 # define PASS (void)0
 
 enum				e_script_flags {
-	LOG_TIME = (1u << 0),
-	LOG_KEYS = (1u << 1),
-	DFLT_SHELL = (1u << 2),
+	FLAG_APPEND = (1u << 0),
+	FLAG_QUIET = (1u << 1),
 };
 
 typedef	struct		s_context {
@@ -49,6 +48,7 @@ typedef	struct		s_context {
 
 char				*get_env_var(char *const envp[], const char *name);
 int					parse_args(t_context *ctx
+								, int argc
 								, char *argv[]
 								, char *const envp[]);
 
