@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/22 21:05:31 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/23 12:58:00 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,7 @@ static int		parse_command(t_context *ctx
 	char	*val;
 	int		perms;
 
-	int a = TS_PERMS_APP;
-	int b = TS_PERMS_NEW;
-	perms = ctx->flags & FLAG_APPEND ? a : b;
+	perms = ctx->flags & FLAG_APPEND ? TS_PERMS_APP : TS_PERMS_NEW;
 	if (argv[i])
 	{
 		ctx->ts_name = argv[i];

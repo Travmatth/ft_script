@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 12:31:28 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/22 21:43:31 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/23 12:57:07 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,38 @@ void	script_exit(t_context *ctx, int status)
 	_exit(status);
 }
 
-void		script_prologue(t_context *ctx)
+int		str_ends_with(char *str)
+{
+	int		len;
+
+	if (!(len = LEN(str, 0)))
+		return (0);
+	return (ft_strequ(&str[len > 2 ? len - 2 : len], "sh"));
+}
+
+void	script_prologue(t_context *ctx)
 {
 	int		i;
+	int		is_shell;
 
 	i = 0;
 	if (!(ctx->flags & FLAG_QUIET))
 	{
 		ft_putstr_fd("Script started on ", ctx->typescript);
 		ft_putstr_fd(get_time(ctx), ctx->typescript);
-		ft_putstr_fd("command:", ctx->typescript);
+		if (!(is_shell = str_ends_with(ctx->command[0])))
+			ft_putstr_fd("command:", ctx->typescript);
 		ft_putstr("Script started, output file is ");
 		ft_putendl(ctx->ts_name);
-		while (ctx->command && ctx->command[i])
+		if (!is_shell)
 		{
-			ft_putstr_fd(" ", ctx->typescript);
-			ft_putstr_fd(ctx->command[i++], ctx->typescript);
+			while (ctx->command && ctx->command[i])
+			{
+				ft_putstr_fd(" ", ctx->typescript);
+				ft_putstr_fd(ctx->command[i++], ctx->typescript);
+			}
+			ft_putstr_fd("\n", ctx->typescript);
 		}
-		ft_putstr_fd("\n", ctx->typescript);
 	}
 }
 
