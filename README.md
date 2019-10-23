@@ -10,8 +10,11 @@ make
 
 ## Usage
 ```
-./ft_script [-kt] [file [command ...]]
+./ft_script [-aq] [file [command ...]]
 ```
+
+`-q`: omit prologue/epilogue on terminal and typescript
+`-a`: open typescript with append rather than truncate
 
 ## Resources
 
