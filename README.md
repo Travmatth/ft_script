@@ -17,6 +17,11 @@ make
 
 `-a`: open typescript with append rather than truncate
 
+## Test
+build tests: `make Test=1 test_utils`
+
+execute tests: `./test/test_utils`
+
 ## Resources
 
 - Advanced Programming in the Unix Environment: Chapter 19: Pseudo Terminals
