@@ -6,11 +6,19 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 18:45:18 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/22 18:57:05 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/23 13:45:22 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
+
+/*
+** use path variable to visit specified folders and search for executable
+** @param {char*} buf - buffer to contain full executable path if found
+** @param {char*} exec - executable file to locate
+** @param {char*} path - path env var containing strings to walk
+** @return {int} 0 if found, 1 otherwise
+*/
 
 int		walk_paths(char buf[BUFSIZ], char *exec, char *path)
 {
@@ -37,6 +45,14 @@ int		walk_paths(char buf[BUFSIZ], char *exec, char *path)
 		start = end ? end + 1 : end;
 	}
 }
+
+/*
+** attempt to locate specified executable and verify said file has exec rights
+** @param {char*} buf - buffer to contain full executable path if found
+** @param {char*} exec - executable file to locate
+** @param {char**} envp - environment variables given to program
+** @return {int} 0 if found, 1 otherwise
+*/
 
 int		find_executable(char buf[BUFSIZ], char *exec, char *const envp[])
 {

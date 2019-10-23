@@ -6,11 +6,18 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/22 21:45:01 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/23 14:23:40 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
+
+/*
+** in the child fork of the program, execute the specified program
+** @param {t_context*} ctx - program context
+** @param {char *const[]} envp - environment variables given to program
+** @return {int} none on success, 1 otherwise
+*/
 
 int		manage_exec(t_context *ctx, char *const envp[])
 {
@@ -35,8 +42,16 @@ int		manage_exec(t_context *ctx, char *const envp[])
 		ft_putstr_fd(" : ", ctx->typescript);
 		ft_putendl_fd(strerror(errno), ctx->typescript);
 	}
-	return (ERROR);
+	return (EXIT_FAILURE);
 }
+
+/*
+** in the parent fork of the program, set terminal to raw mode, ignoring signals
+** in order to pass to the pty
+** @param {t_context*} ctx - program context
+** @param {int}_fd - fd to set in raw mode
+** @return {int} 0 on success, 1 otherwise
+*/
 
 int		prep_pty(t_context *ctx, int fd)
 {
@@ -66,35 +81,59 @@ int		prep_pty(t_context *ctx, int fd)
 	return (EXIT_SUCCESS);
 }
 
+/*
+** when user has written to stdin, data is copied to pty master fd
+** @param {int} master_fd - master fd of the pty pair
+** @param {char[BUFSIZ]} buf - buffer to use in copying data
+** @return {int} 0 on success, 1 otherwise
+*/
+
 int		read_terminal_input(int master_fd, char buf[BUFSIZ])
 {
 	ssize_t	bytes;
 
 	if ((bytes = read(STDIN_FILENO, buf, BUFSIZ)) == ERROR)
-		return (1);
+		return (EXIT_FAILURE);
 	else if (bytes == 0)
-		return (1);
+		return (EXIT_FAILURE);
 	else if (write(master_fd, buf, bytes) != bytes)
-		return (1);
-	return (0);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
+
+/*
+** when pty has data on master pty fd, data is written to stdout and typescript
+** @param {t_context*} ctx - program context
+** @param {int} master_fd - master fd of the pty pair
+** @param {char[BUFSIZ]} buf - buffer to use in copying data
+** @return {int} 0 on success, 1 otherwise
+*/
 
 int		write_pty_output(t_context *ctx, int master_fd, char buf[BUFSIZ])
 {
 	ssize_t	bytes;
 
 	if ((bytes = read(master_fd, buf, BUFSIZ - 2)) == ERROR)
-		return (1);
+		return (EXIT_FAILURE);
 	else if (bytes == 0)
-		return (1);
+		return (EXIT_FAILURE);
 	buf[bytes] = '\n';
 	buf[bytes + 1] = '\0';
 	if (write(STDOUT_FILENO, buf, bytes) != bytes)
-		return (1);
+		return (EXIT_FAILURE);
 	else if (write(ctx->typescript, buf, bytes) != bytes)
-		return (1);
-	return (0);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
+
+/*
+** print stdin/typescript notices if specified, then watch pty master and slave,
+** writing to pty slave (the specified program or shell) if user entered data,
+** or the stdout and typescript if pty has data available. print notice of
+** stdout/typescript on exit
+** @param {t_context*} ctx - program context
+** @param {int} master_fd - master fd of the pty pair
+*/
 
 void	manage_pty(t_context *ctx, int master_fd)
 {

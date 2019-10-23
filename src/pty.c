@@ -6,11 +6,18 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/10 12:36:37 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 01:29:16 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/23 14:22:34 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
+
+/*
+** in the child process set slave pty fd as stdin/out/err, close master fd
+** @param {char*} slave_name - location to save slave pty name
+** @param {int} master_fd - master fd to close in the child
+** @param {int} fd - fd to set as stdin/out/err in the child process
+*/
 
 void	dup_close_stdio(t_context *ctx, int master_fd, int fd)
 {
@@ -32,6 +39,12 @@ void	dup_close_stdio(t_context *ctx, int master_fd, int fd)
 		close(fd);
 }
 
+/*
+** open, unlock a master pty, obtain slave pty name
+** @param {char*} slave_name - location to save slave pty name
+** @return {int} master pyt fd if opened successfully, 1 otherwise
+*/
+
 int		open_pty_master(char *slave_name)
 {
 	int		master_pty;
@@ -41,7 +54,7 @@ int		open_pty_master(char *slave_name)
 	if ((master_pty = open("/dev/ptmx", O_RDWR)) == ERROR)
 	{
 		DEBUG_LOG("posix_openpt failed: %s\n", strerror(errno));
-		return (ERROR);
+		return (EXIT_FAILURE);
 	}
 	else if (ioctl(master_pty, TIOCPTYGRANT) == ERROR)
 		DEBUG_LOG("grantpt failed: %s\n", strerror(errno));
@@ -56,8 +69,16 @@ int		open_pty_master(char *slave_name)
 		return (master_pty);
 	}
 	close(master_pty);
-	return (ERROR);
+	return (EXIT_FAILURE);
 }
+
+/*
+** attempts to set up pseudo-terminal and save slave pty name, master fd
+** @param {t_context*} ctx - program context
+** @param {int*} fd - location to save master fd
+** @param {char*} slave_name - location to save slave pty name
+** @return {int} child pid if launch successful, 1 otherwise
+*/
 
 int		open_pty(t_context *ctx, int *fd, char *slave_name)
 {
@@ -66,7 +87,7 @@ int		open_pty(t_context *ctx, int *fd, char *slave_name)
 	int		slave_fd;
 
 	errno = 0;
-	if (((master_fd = open_pty_master(slave_name)) == ERROR)
+	if (((master_fd = open_pty_master(slave_name)) == EXIT_FAILURE)
 		|| ((pid = fork()) == ERROR))
 		return (EXIT_FAILURE);
 	else if (pid == 0)
@@ -78,7 +99,7 @@ int		open_pty(t_context *ctx, int *fd, char *slave_name)
 		else
 		{
 			dup_close_stdio(ctx, master_fd, slave_fd);
-			return (0);
+			return (EXIT_SUCCESS);
 		}
 		script_exit(ctx, EXIT_FAILURE);
 	}

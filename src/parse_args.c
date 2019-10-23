@@ -6,11 +6,18 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/23 13:23:21 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/23 14:10:02 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
+
+/*
+** iterate environment variables and return specified variable if available
+** @param {*const envp[]} envp - the environment variables passed to program
+** @param {const *char} name - the variable to find
+** @return {char*} the value of the variable if defined, NULL otherwise
+*/
 
 char			*get_env_var(char *const envp[], const char *name)
 {
@@ -37,6 +44,15 @@ char			*get_env_var(char *const envp[], const char *name)
 		value = (char*)&envp[i][len + 1];
 	return (value);
 }
+
+/*
+** parse the command line arguments into t_context and set/open typescript file
+** @param {t_context*} ctx - the program context
+** @param {*char[]} argv - the arguments passed to program
+** @param {*const envp[]} envp - the environment variables passed to program
+** @param {int} i - current index of arg parsing
+** @return 0 if successful, 1 otherwise
+*/
 
 static int		parse_command(t_context *ctx
 							, char *argv[]
@@ -67,6 +83,15 @@ static int		parse_command(t_context *ctx
 	}
 	return (ctx->typescript == ERROR ? EXIT_FAILURE : EXIT_SUCCESS);
 }
+
+/*
+** parse the command line arguments into t_context and set/open typescript file
+** @param {t_context*} ctx - the program context
+** @param {int} argc - number of arguments passed program
+** @param {*char[]} argv - the arguments passed to program
+** @param {*const envp[]} envp - the environment variables passed to program
+** @return {int} 0 if parsing successful, 1 otherwise
+*/
 
 int				parse_args(t_context *ctx
 							, int argc

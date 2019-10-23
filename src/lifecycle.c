@@ -6,11 +6,17 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 12:31:28 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/23 12:57:07 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/23 13:58:37 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_script.h"
+
+/*
+** find current time and return as formatted string
+** @param {t_context*} ctx - program context to pass to exit if syscall fails
+** @return {char*} current time string
+*/
 
 char	*get_time(t_context *ctx)
 {
@@ -21,11 +27,22 @@ char	*get_time(t_context *ctx)
 	return (ctime(&timestamp.tv_sec));
 }
 
+/*
+** reset tty settings if error occurs during running and exit is necessary
+** @param {t_context*} ctx - program context to pass to exit if syscall fails
+*/
+
 void	script_exit(t_context *ctx, int status)
 {
 	ioctl(STDIN_FILENO, TIOCSETA, &ctx->original_tty);
 	_exit(status);
 }
+
+/*
+** determine if program specified by user is a shell
+** @param {char*} str - program to check
+** @return {int} 0 if program is a shell, 1 otherwise
+*/
 
 int		str_ends_with(char *str)
 {
@@ -35,6 +52,12 @@ int		str_ends_with(char *str)
 		return (0);
 	return (ft_strequ(&str[len > 2 ? len - 2 : len], "sh"));
 }
+
+/*
+** print notices for stdout and typescript file on start if requested
+** @param {char*} str - program to check
+** @return {int} 0 if program is a shell, 1 otherwise
+*/
 
 void	script_prologue(t_context *ctx)
 {
@@ -61,6 +84,12 @@ void	script_prologue(t_context *ctx)
 		}
 	}
 }
+
+/*
+** print notices for stdout and typescript file on end if requested
+** @param {char*} str - program to check
+** @return {int} 0 if program is a shell, 1 otherwise
+*/
 
 void	script_epilogue(t_context *ctx)
 {
