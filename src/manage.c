@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 16:41:56 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/22 21:45:01 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,7 @@ void	manage_pty(t_context *ctx, int master_fd)
 		if (FD_ISSET(master_fd, &fds) && write_pty_output(ctx, master_fd, buf))
 			break ;
 	}
+	if (ioctl(STDIN_FILENO, TIOCSETA, &ctx->original_tty))
+		return ;
 	script_epilogue(ctx);
 }

@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 12:31:28 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 16:40:18 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/22 21:43:31 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void		script_prologue(t_context *ctx)
 
 void	script_epilogue(t_context *ctx)
 {
-	ioctl(STDIN_FILENO, TIOCSETA, &ctx->original_tty);
 	if (!(ctx->flags & FLAG_QUIET))
 	{
 		ft_putstr_fd("\nScript done on ", ctx->typescript);

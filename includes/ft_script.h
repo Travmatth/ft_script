@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 15:51:03 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 02:56:06 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/22 20:55:44 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 # include <sys/ioctl.h>
 # include <sys/time.h>
 
-# define TS_PERMS (O_WRONLY | O_CREAT | O_TRUNC)
+# define TS_PERMS_NEW (O_WRONLY | O_CREAT | O_TRUNC)
+# define TS_PERMS_APP (O_WRONLY | O_CREAT | O_APPEND)
 # define OPEN_ERR "ft_script: error opening %s due to error: %s\n"
 # define PASS (void)0
 
@@ -79,7 +80,7 @@ int					find_executable(char path[BUFSIZ]
 */
 
 void				script_exit(t_context *ctx, int status);
-int					script_prologue(t_context *ctx);
+void				script_prologue(t_context *ctx);
 void				script_epilogue(t_context *ctx);
 
 /*

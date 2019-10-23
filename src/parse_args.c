@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:03:29 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/21 04:45:18 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/22 21:05:31 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ static int		parse_command(t_context *ctx
 							, int i)
 {
 	char	*val;
+	int		perms;
 
+	int a = TS_PERMS_APP;
+	int b = TS_PERMS_NEW;
+	perms = ctx->flags & FLAG_APPEND ? a : b;
 	if (argv[i])
 	{
 		ctx->ts_name = argv[i];
@@ -52,7 +56,7 @@ static int		parse_command(t_context *ctx
 	}
 	else
 		ctx->ts_name = "typescript";
-	if ((ctx->typescript = open(ctx->ts_name, TS_PERMS, 0666)) == ERROR)
+	if ((ctx->typescript = open(ctx->ts_name, perms, 0666)) == ERROR)
 		ft_dprintf(STDERR_FILENO, OPEN_ERR, ctx->ts_name, strerror(errno));
 	else if (argv[i])
 		ctx->command = &argv[i];

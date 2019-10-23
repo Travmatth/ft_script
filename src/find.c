@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 18:45:18 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/18 15:55:32 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/22 18:57:05 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		walk_paths(char buf[BUFSIZ], char *exec, char *path)
 	start = path;
 	while (1)
 	{
-		if (!start[0])
+		if (!start || !start[0])
 			return (EXIT_FAILURE);
 		buf[0] = '\0';
 		if (!(end = ft_strchr(start, ':')))
@@ -34,7 +34,7 @@ int		walk_paths(char buf[BUFSIZ], char *exec, char *path)
 		ft_strcat(buf, exec);
 		if (!access(buf, X_OK))
 			return (EXIT_SUCCESS);
-		start = end + 1;
+		start = end ? end + 1 : end;
 	}
 }
 

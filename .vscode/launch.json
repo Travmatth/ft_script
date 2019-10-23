@@ -50,8 +50,8 @@
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "env": {
-                "SHELL": "/bin/zsh",
-				"PATH": "/nfs/2018/t/tmatthew/space_cadet/go/bin:/nfs/2018/t/tmatthew/space_cadet:/nfs/2018/t/tmatthew/.brew/bin:/nfs/2018/t/tmatthew/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/munki"
+                "SHELL": "${env:SHELL}",
+                "PATH": "${env:PATH}"
             },
             "setupCommands": [
                 { "text": "settings set target.input-path test/input.txt" }
