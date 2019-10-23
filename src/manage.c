@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/23 14:23:40 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/23 16:26:26 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	manage_pty(t_context *ctx, int master_fd)
 	script_prologue(ctx);
 	if (prep_pty(ctx, STDIN_FILENO) == EXIT_FAILURE)
 	{
-		tcsetattr(STDIN_FILENO, TCSANOW, &ctx->original_tty);
+		ioctl(STDIN_FILENO, TIOCSETA, &ctx->original_tty);
 		return ;
 	}
 	while (1)
