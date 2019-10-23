@@ -14,6 +14,7 @@ make
 ```
 
 `-q`: omit prologue/epilogue on terminal and typescript
+
 `-a`: open typescript with append rather than truncate
 
 ## Resources
