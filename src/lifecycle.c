@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/18 12:31:28 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/23 13:58:37 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/25 10:46:28 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ int		str_ends_with(char *str)
 
 /*
 ** print notices for stdout and typescript file on start if requested
-** @param {char*} str - program to check
-** @return {int} 0 if program is a shell, 1 otherwise
+** @param {t_context*} ctx - program context
 */
 
 void	script_prologue(t_context *ctx)
@@ -87,8 +86,7 @@ void	script_prologue(t_context *ctx)
 
 /*
 ** print notices for stdout and typescript file on end if requested
-** @param {char*} str - program to check
-** @return {int} 0 if program is a shell, 1 otherwise
+** @param {t_context*} ctx - program context
 */
 
 void	script_epilogue(t_context *ctx)

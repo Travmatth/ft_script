@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 18:45:18 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/23 13:45:22 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/25 10:44:01 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** @param {char*} buf - buffer to contain full executable path if found
 ** @param {char*} exec - executable file to locate
 ** @param {char*} path - path env var containing strings to walk
-** @return {int} 0 if found, 1 otherwise
+** @return {int} 0 if found and executable, 1 otherwise
 */
 
 int		walk_paths(char buf[BUFSIZ], char *exec, char *path)
@@ -51,7 +51,7 @@ int		walk_paths(char buf[BUFSIZ], char *exec, char *path)
 ** @param {char*} buf - buffer to contain full executable path if found
 ** @param {char*} exec - executable file to locate
 ** @param {char**} envp - environment variables given to program
-** @return {int} 0 if found, 1 otherwise
+** @return {int} 0 if found and executable, 1 otherwise
 */
 
 int		find_executable(char buf[BUFSIZ], char *exec, char *const envp[])

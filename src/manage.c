@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 23:29:01 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/23 16:26:26 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/25 10:53:29 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** in the child fork of the program, execute the specified program
 ** @param {t_context*} ctx - program context
 ** @param {char *const[]} envp - environment variables given to program
-** @return {int} none on success, 1 otherwise
+** @return {int} 1 on execve error
 */
 
 int		manage_exec(t_context *ctx, char *const envp[])
@@ -46,8 +46,8 @@ int		manage_exec(t_context *ctx, char *const envp[])
 }
 
 /*
-** in the parent fork of the program, set terminal to raw mode, ignoring signals
-** in order to pass to the pty
+** in the parent fork of the program, set terminal to raw mode
+** ignoring signals in order to pass them to the pty
 ** @param {t_context*} ctx - program context
 ** @param {int}_fd - fd to set in raw mode
 ** @return {int} 0 on success, 1 otherwise
@@ -127,10 +127,10 @@ int		write_pty_output(t_context *ctx, int master_fd, char buf[BUFSIZ])
 }
 
 /*
-** print stdin/typescript notices if specified, then watch pty master and slave,
-** writing to pty slave (the specified program or shell) if user entered data,
-** or the stdout and typescript if pty has data available. print notice of
-** stdout/typescript on exit
+** print stdin/typescript notices if specified
+** watch pty master and slave, writing to pty slave (the specified program or
+** shell) if user entered data, or the stdout and typescript if pty has data
+** available. print notice of stdout/typescript on exit
 ** @param {t_context*} ctx - program context
 ** @param {int} master_fd - master fd of the pty pair
 */
